@@ -1,0 +1,36 @@
+PlayWright Test
+import { test, expect } from '@playwright/test';
+
+test('input type in domain 6', async ({ page }) => {
+  await page.goto('http://localhost:3000/assessment/6');
+
+  // get number type
+  const numberInput = await page.locator('input[name="6-1"]');
+
+  // input value
+  await numberInput.type('12345');
+
+  await page.keyboard.press('Tab');
+  // check value
+  const inputValue = await numberInput.getAttribute('value');
+  expect(inputValue).toBe('12345');
+
+  // get check type
+  const checkInput = await page.locator('input[name="6-4"][value="Yes"]');
+
+  // input value
+  await checkInput.check();
+
+  // check value
+  const isChecked = await checkInput.isChecked();
+  expect(isChecked).toBe(true);
+
+  // get select type
+  await page.locator('div[aria-haspopup="listbox"]').first().click();
+  await page.getByRole('option', { name: 'すべて' }).click();
+
+  // check value
+  const selectInput = await page.locator('input[name="6-8"]');
+  const selectValue = await selectInput.getAttribute('value');
+  expect(selectValue).toBe("すべて");
+});
